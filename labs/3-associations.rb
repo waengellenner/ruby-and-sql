@@ -16,9 +16,36 @@ Activity.destroy_all
 
 # 1. insert 3 rows in the activities table with relationships to
 # a single salesperson and 2 different contacts
+ben = Salesperson.find_by({"last_name"=> "Block"})
+contact1 = Contact.find_by({"last_name" => "Cook"})
+contact2 = Contact.find_by({"last_name" => "Jobs"})
+
+new_activity = Activity.new
+new_activity["salesperson_id"] = ben["id"]
+new_activity["contact_id"] = contact1["id"]
+new_activity["note"] = "Meet cute"
+new_activity.save
+
+new_activity = Activity.new
+new_activity["salesperson_id"] = ben["id"]
+new_activity["contact_id"] = contact2["id"]
+new_activity["note"] = "Meet cute"
+new_activity.save
+
+new_activity = Activity.new
+new_activity["salesperson_id"] = ben["id"]
+new_activity["contact_id"] = contact2["id"]
+new_activity["note"] = "Kissy kissy"
+new_activity.save
 
 # 2. Display all the activities between the salesperson used above
 # and one of the contacts (sample output below):
+
+# my_activities = Activity.where("salesperson_id" => ben["id"],"contact_id" => contact2["id"])
+# puts "Dear diary:"
+# for activity in my_activities
+#     puts "-#{activity["note"]}"
+# end    
 
 # ---------------------------------
 # Activities between Ben and Tim Cook:
@@ -28,6 +55,13 @@ Activity.destroy_all
 # CHALLENGE:
 # 3. Similar to above, but display all of the activities for the salesperson
 # across all contacts (sample output below):
+
+my_activities = Activity.where("salesperson_id" => ben["id"])
+puts "Dear diary:"
+for activity in my_activities
+    contact = Contact.find_by({"id"=>activity["contact_id"]})
+    puts "-#{activity["note"]} with #{contact["first_name"]} #{contact["last_name"]}"
+end    
 
 # ---------------------------------
 # Ben's Activities:
